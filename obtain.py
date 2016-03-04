@@ -22,7 +22,7 @@ class Obtain:
         files, directories, and programs are located.  
         """
         self.ftppath = "ftp://ftp.ivydb.com/IvyDBIntl/v2.1/" # Case sensitive
-        self.savepath = "/if/udata/optionmetrics/"
+        self.savepath = "/if/udata/optionmetrics/raw_zip"
 
         # programs
         self.curlpath = "/opt/local/bin/curl"
@@ -48,7 +48,7 @@ class Obtain:
         subprocess.call([self.curlpath, '-s', self.ftppath+name,
             '--netrc', '--output', self.savepath+name])
         if path.exists(self.savepath+name):
-            pass
+            print("Sucessfully downloaded {}.".format(name))
         else:
             raise ObtainError("File {} cannot be processed.".format(name) +
                     "  Either it was not found on the FTP server, " +
@@ -214,7 +214,8 @@ class TestObtain(unittest.TestCase):
 if __name__=='__main__':
     om = Obtain()
     try:
-        date_str = dt.today().strftime('%Y%m%d')
+        # date_str = dt.datetime(2016,2,d).strftime('%Y%m%d')
+        date_str = (dt.datetime.today()-dt.timedelta(1)).strftime('%Y%m%d')
         om.download_file("INTL.IVYDB.{}D.zip".format(date_str))
     except:
         pass
