@@ -21,12 +21,10 @@ class Obtain:
         This __init__ statement contains the paths for where
         files, directories, and programs are located.  
         """
-        self.ftppath = "ftp://ftp.ivydb.com/IVYDBIntl/v2.1/"
-        # self.savepath = "/lcl/data/scratch/m1rab03/optionmetrics/"
+        self.ftppath = "ftp://ftp.ivydb.com/IvyDBIntl/v2.1/" # Case sensitive
         self.savepath = "/if/udata/optionmetrics/"
 
         # programs
-        self.sqlpath = "/opt/local/bin/sqlite3"
         self.curlpath = "/opt/local/bin/curl"
 
     def download_file(self, name):
@@ -49,9 +47,6 @@ class Obtain:
         """
         subprocess.call([self.curlpath, '-s', self.ftppath+name,
             '--netrc', '--output', self.savepath+name])
-        print self.curlpath+'-s'+self.ftppath+name+'--netrc'+ '--output'+ self.savepath+name
-        """print([self.curlpath, '-s', self.ftppath+name,
-            '--netrc', '--output', self.savepath+name])"""
         if path.exists(self.savepath+name):
             pass
         else:
@@ -153,27 +148,27 @@ class TestObtain(unittest.TestCase):
             subprocess.check_output(['mv', file, file[:-4]])
 
 
-#    # Tests of .download_file()
-#    def test01DownloadFileOnServer(self):
-#        """
-#        This will attempt to download a file.
-#
-#        This tests .download_file()
-#        """
-#        self.om.download_file("INTL.IVYDB.{}D.zip".format(self.good_day_str))
-#        self.assertTrue(path.exists(
-#            self.om.savepath+"INTL.IVYDB.{}D.zip".format(self.good_day_str)))
-#
-#    def test02DownloadFileNotOnServer(self):
-#        """
-#        This will confirm that an error is raised
-#        when the user requests to downlad a file 
-#        that is not on the server.
-#
-#        This tests .download_file()
-#        """
-#        with self.assertRaises(ObtainError):
-#            self.om.download_file("INTL.IVYDB.{}D.zip".format(self.bad_day))
+    # Tests of .download_file()
+    def test01DownloadFileOnServer(self):
+        """
+        This will attempt to download a file.
+
+        This tests .download_file()
+        """
+        self.om.download_file("INTL.IVYDB.{}D.zip".format(self.good_day_str))
+        self.assertTrue(path.exists(
+            self.om.savepath+"INTL.IVYDB.{}D.zip".format(self.good_day_str)))
+
+    def test02DownloadFileNotOnServer(self):
+        """
+        This will confirm that an error is raised
+        when the user requests to downlad a file 
+        that is not on the server.
+
+        This tests .download_file()
+        """
+        with self.assertRaises(ObtainError):
+            self.om.download_file("INTL.IVYDB.{}D.zip".format(self.bad_day))
 
     # Tests for .unzip_file()
     def test10UnzipFile(self):
@@ -203,44 +198,24 @@ class TestObtain(unittest.TestCase):
         self.assertEquals(len(glob.glob(
             self.om.savepath+"INTL.IVY*.{}D.txt".format(self.good_day_str))),
             0) # No .txt files for that date.
+    # Tests of .load_daily_data()
+    def test20LoadDailyDataFileOnServer(self):
+        """
+        This will attempt to download a file if it is not
+        already downloaded. 
 
-#    # Tests of .load_daily_data()
-#    def test20LoadDailyDataFileOnServer(self):
-#        """
-#        This will attempt to download a file if it is not
-#        already downloaded. 
-#
-#        This tests .load_daily_data()
-#        """
-#        self.om.load_daily_data(self.good_day)
-#        self.assertTrue(path.exists(
-#            self.om.savepath+"INTL.IVYDB.{}D.zip".format(self.good_day_str)))
-#
+        This tests .load_daily_data()
+        """
+        self.om.load_daily_data(self.good_day)
+        self.assertTrue(path.exists(
+            self.om.savepath+"INTL.IVYDB.{}D.zip".format(self.good_day_str)))
+
 
 if __name__=='__main__':
-    # unittest.main()
-    """today = dt.datetime.today()+dt.timedelta(days=5)
-    om.load_daily_data(today)
-    # om.unzip_file(today, date=True)
     om = Obtain()
-    today = dt.datetime.today()
-    for date in [today-dt.timedelta(days=x) for x in range(365*2)]:
-        print(date)
-        try:
-            om.load_daily_data(date)
-        except:
-            print("{} was not found.".format(str(date)))
-    """
-    om = Obtain()
-    for day in range(1,31):
-        try:
-            date  = dt.datetime(2016, 2, day)
-            date_str = date.strftime('%Y%m%d')
-            om.download_file("INTL.IVYDB.{}D.zip".format(date_str))
-            time.sleep(30)
-        except:
-            print day
-
-
-
+    try:
+        date_str = dt.today().strftime('%Y%m%d')
+        om.download_file("INTL.IVYDB.{}D.zip".format(date_str))
+    except:
+        pass
 
