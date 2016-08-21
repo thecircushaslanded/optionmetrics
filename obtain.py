@@ -16,13 +16,13 @@ class ObtainError(Exception):
 
 
 class Obtain:
-    def __init__(self):
+    def __init__(self, savepath):
         """
         This __init__ statement contains the paths for where
         files, directories, and programs are located.  
         """
         self.ftppath = "ftp://ftp.ivydb.com/IvyDBIntl/v2.1/" # Case sensitive
-        self.savepath = "/if/udata/optionmetrics/raw_zip"
+        self.savepath = ""
 
         # programs
         self.curlpath = "/opt/local/bin/curl"
